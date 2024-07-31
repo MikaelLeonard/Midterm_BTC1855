@@ -131,5 +131,41 @@ trip_w <- trip_w %>%
 head(sort(trip_w$zip_code, decreasing = T), 10)
 head(sort(trip_w$zip_code, decreasing = F), 10)
 
+###########################################
+### EDA of the trip and weather dataset ###
+###########################################
+
+# All the subsequent EDAs will be performed following the tutorial in 
+# https://blog.datascienceheroes.com/exploratory-data-analysis-in-r-intro/ 
+
+# Setting-up - installing packages required. Uncomment the following code if they
+# are not already installed. I have only installed tidyverse, so I'll uncomment
+# the remaining two
+
+# install.packages("tidyverse")
+install.packages("funModeling")
+install.packages("Hmisc")
+
+# Loading the packages
+library(funModeling) 
+library(tidyverse) 
+library(Hmisc)
+
+# tl;dr code
+basic_eda <- function(data)
+{
+  glimpse(data)
+  print(status(data))
+  freq(data) 
+  print(profiling_num(data))
+  plot_num(data)
+  describe(data)
+}
+
+# Performing the EDA on the workig trip dataset (trip_w)
+basic_eda(trip_w)
+
+# Performing the EDA on the working weather dataset (weather_w)
+basic_eda(weather_w)
 
 
