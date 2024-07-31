@@ -168,4 +168,34 @@ basic_eda(trip_w)
 # Performing the EDA on the working weather dataset (weather_w)
 basic_eda(weather_w)
 
+######################################
+### Create a cancelled trip column ###
+######################################
+
+# Create a cancelled trip column when the start station name is the same as the
+# end station name and the duration is less than 3 minutes (180 seconds)
+trip_with_can <- trip_w %>%
+  mutate(cancelled_trip = ifelse(start_station_name == end_station_name & duration < 180, 'Yes', 'No'))
+
+# Find out the number of cancelled trips, where there are 1082 trips being cancelled
+freq(trip_with_can$cancelled_trip)
+describe(trip_with_can$cancelled_trip)
+
+cancelled_trip_count <- nrow(trip_with_can %>%
+         filter(cancelled_trip == "Yes"))
+
+cancelled_trip_count
+
+# Record the trip ids for cancelled trips
+cancelled_trip_ids <- trip_with_can %>% 
+  filter(cancelled_trip == 'Yes') %>% 
+  select(id)
+
+cancelled_trip_ids
+
+# Removing the cancelled trips from the working trip dataset
+trip_uncancelled <- trip_with_can %>%
+  filter(cancelled_trip == "No")
+
+
 
