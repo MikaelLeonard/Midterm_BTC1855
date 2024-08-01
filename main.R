@@ -360,4 +360,48 @@ ggplot(top_end_stations_weekend, aes(x = reorder(end_station_name, -trip_count),
   labs(title = "Top 10 Ending Stations During Weekends", x = "Station", y = "Trip Count") +
   theme_grey()
 
+########################################
+### Average monthly bike utilization ###
+########################################
+
+# Extract the month for each trip from the start_date column
+trip_month <- trip_hm %>%
+  mutate(month = month(start_date))
+  
+# Summarize total duration and number of trips for each month
+monthly_usage <- trip_month %>%
+  group_by(month) %>%
+  summarise(total_duration = sum(duration), 
+            total_trips = n())
+
+monthly_usage
+
+# Assuming the total number of bikes is the number of unique bike_id in the trip dataset
+total_bikes <- n_distinct(trip_month$bike_id)
+
+# Calculate the number of days in each month using the days_in_month function from
+# lubridate package
+monthly_usage <- monthly_usage %>%
+  mutate(days_in_month = days_in_month(ymd(paste("2014", month, "01", sep = "-"))))
+
+# Calculate total time in month (in seconds)
+# Since there are 687 bikes in total, the total time used of the bikes are for the 687 bikes.
+# Thus, the total available time in each month will have to be for 687 bikes (not just 1 bike)
+# since 687 are available to be used
+monthly_usage <- monthly_usage %>%
+  mutate(total_time_in_month = days_in_month * 24 * 60 * 60 * total_bikes)
+
+# Calculate average monthly bike utilization
+# avg_utilization = total_duration / total_time_in_month
+monthly_usage <- monthly_usage %>%
+  mutate(avg_utilization = total_duration / (total_time_in_month)) %>%
+  mutate(percent_utilization = avg_utilization * 100)
+
+# Let's view the complete monthly ulitization data frame
+monthly_usage
+
+# Here's the percent utilization for a single bike on each month
+monthly_usage$percent_utilization
+
+
 
