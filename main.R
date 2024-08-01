@@ -413,7 +413,21 @@ monthly_usage$percent_utilization
 # to get the city added as a new column corresponding to the city in the start(or end is better)
 # station name in the trip_month dataset
 
+trip_date_isolated <- trip_month %>%
+  separate(start_date, c('date', 'time'), sep = " ")
+
+trip_date_isolated$date <- ymd(trip_date_isolated$date)
+
+str(trip_date_isolated$date)
+
+trip_station <- trip_date_isolated %>%
+  left_join(station_w, by = c("start_station_name" = "name"))
+
 # Join combined trip and station dataset (basically trip dataset with the city from the station dataset)
 # with the weather dataset by date and city
+
+trip_stat_weather <- trip_station %>%
+  left_join(weather_w, by = c("date" = "date", "city" = "city"))
+
 
 
