@@ -247,4 +247,17 @@ trip_no_outliers
 # Let's now vizualize the cleaned dataset without the outliers
 plot_num(trip_no_outliers)
 
+############################
+### Establish rush hours ###
+############################
+
+# Let's start by getting the hours and days of the start_date from each trip
+trip_hm <- trip_no_outliers %>%
+  mutate(hour = hour(start_date),
+         weekday = wday(start_date, label = TRUE))
+
+# Now, filtering the weekday trips only (excluding saturdays and sundays)
+trip_weekdays <- trip_hm %>%
+  filter(!weekday %in% c("Sat", "Sun"))
+
 
