@@ -18,4 +18,6 @@ Step 7: Get the most frequent stations during the weekends
 
 Step 8: Calculate the average utilization for each month
 
+Step 9: Analyze weather condition's impact on rental patters
+
 
