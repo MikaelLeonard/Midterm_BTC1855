@@ -16,6 +16,6 @@ Step 6: Establish rush hours and get their most frequent stations
 
 Step 7: Get the most frequent stations during the weekends
 
-Step 8: 
+Step 8: Calculate the average utilization for each month
 
 
