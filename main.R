@@ -247,6 +247,8 @@ trip_no_outliers
 # Let's now vizualize the cleaned dataset without the outliers
 plot_num(trip_no_outliers)
 
+hist(trip_no_outliers$duration)
+
 ############################
 ### Establish rush hours ###
 ############################
@@ -429,5 +431,32 @@ trip_station <- trip_date_isolated %>%
 trip_stat_weather <- trip_station %>%
   left_join(weather_w, by = c("date" = "date", "city" = "city"))
 
+# Let's now begin with plotting the correlation. As we'll use the cor() function
+# to generate the correlation matrix, we'll need to install the corrplot package
+# if its not yet installed and load the package.
+#install.packages("corrplot")
+library(corrplot)
 
+# Since we're interested in biking rental patterns caused by different weather conditions,
+# we can select specific columns from the joined dataframe to focus on them.
+
+# One avenue we can focus on is to see whether the duration of one's bike ride is correlation
+# or affected by the weather condition.
+
+# To do so, we can select the duration column and the numerical weather condition columns
+# pertaining to temperature, visibility, wind speed, gust speed, precipitation inches, and
+# cloud cover.
+correlation_columns <- trip_stat_weather %>%
+  select(duration, min_temperature_f, mean_temperature_f, max_temperature_f, 
+         mean_visibility_miles, mean_wind_speed_mph, max_gust_speed_mph, 
+         precipitation_inches, cloud_cover)
+
+# Then, using the cor() function, we'll create the correlation matrix
+correlation_matrix <- cor(correlation_columns, use = "complete.obs")
+
+par(mar = c(5.1, 4.1, 6.1, 2.1))
+
+# Plot the correlation matrix
+corrplot(correlation_matrix, method = "color", tl.cex = 0.7, tl.col = "black")
+title("Correlation Matrix of Trip and Weather Data", line = 4)
 
