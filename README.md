@@ -11,3 +11,5 @@ Step 3: Exploratory data analysis for each dataset
 Step 4: Identify and remove cancelled trips
 
 Step 5: Identify and remove outliers
+
+Step 6: Establish rush hours
