@@ -403,5 +403,17 @@ monthly_usage
 # Here's the percent utilization for a single bike on each month
 monthly_usage$percent_utilization
 
+#######################################################
+### Weather condition impact on bike renal analysis ###
+#######################################################
+
+# join the trip_month dataset with weather_w dataset for each city and date
+
+# join the trip_month dataset with the station_w dataset for the date and city 
+# to get the city added as a new column corresponding to the city in the start(or end is better)
+# station name in the trip_month dataset
+
+# Join combined trip and station dataset (basically trip dataset with the city from the station dataset)
+# with the weather dataset by date and city
 
 
