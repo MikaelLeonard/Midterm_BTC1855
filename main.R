@@ -247,4 +247,117 @@ trip_no_outliers
 # Let's now vizualize the cleaned dataset without the outliers
 plot_num(trip_no_outliers)
 
+############################
+### Establish rush hours ###
+############################
+
+# Let's start by getting the hours and days of the start_date from each trip
+trip_hm <- trip_no_outliers %>%
+  mutate(hour = hour(start_date),
+         weekday = wday(start_date, label = TRUE))
+
+# Now, filtering the weekday trips only (excluding saturdays and sundays)
+trip_weekdays <- trip_hm %>%
+  filter(!weekday %in% c("Sat", "Sun"))
+
+# Obtain the count of trips for each hour 
+hourly_volume <- trip_weekdays %>%
+  group_by(hour) %>%
+  summarise(trip_count = n()) %>%
+  arrange(desc(trip_count))
+
+# Plot the rush hour trip volumes
+library(ggplot2)
+ggplot(hourly_volume, aes(x = hour, y = trip_count)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  labs(title = "Trip Counts by Hour on Weekdays", x = "Hour of the Day", y = "Trip Count") +
+  theme_grey()
+
+# Looking at the plot, we can determine that the rush hours are in the morning at
+# 8 and 9 AM and in the afternoon at 5 and 6 PM
+
+###################################
+### Weekday rush hours stations ###
+###################################
+
+# Establish a vector for the rush hours
+rush <- c(8, 9, 17, 18)
+
+# Filter the weekday trip datasets to get only the trips in those rush hours
+trip_rush_weekday <- trip_weekdays %>%
+  filter(hour %in% rush)
+
+# Obtain the top 10 starting bike stations from the weekday rush hours
+top_start_stations_weekday <- trip_rush_weekday %>%
+  group_by(start_station_name) %>%
+  summarise(trip_count = n()) %>%
+  arrange(desc(trip_count)) %>%
+  head(10)
+
+top_start_stations_weekday
+
+# Plot the most frequent starting stations
+ggplot(top_start_stations_weekday, aes(x = reorder(start_station_name, -trip_count), y = trip_count)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  coord_flip() +
+  labs(title = "Top 10 Starting Stations During Rush Hours", x = "Station", y = "Trip Count") +
+  theme_grey()
+
+# Obtain the top 10 ending bike stations from the weekday rush hours
+top_end_stations_weekday <- trip_rush_weekday %>%
+  group_by(end_station_name) %>%
+  summarise(trip_count = n()) %>%
+  arrange(desc(trip_count)) %>%
+  head(10)
+
+top_end_stations_weekday
+
+# Plot the most frequent ending stations
+ggplot(top_end_stations_weekday, aes(x = reorder(end_station_name, -trip_count), y = trip_count)) +
+  geom_bar(stat = "identity", fill = "red") +
+  coord_flip() +
+  labs(title = "Top 10 Ending Stations During Rush Hours", x = "Station", y = "Trip Count") +
+  theme_grey()
+
+
+################################
+### Weekend popular stations ###
+################################
+
+# Now, filtering the weekend trips only (only saturdays and sundays)
+trip_weekends <- trip_hm %>%
+  filter(weekday %in% c("Sat", "Sun"))
+
+# Obtain the top 10 starting bike stations during the weekends
+top_start_stations_weekend <- trip_weekends %>%
+  group_by(start_station_name) %>%
+  summarise(trip_count = n()) %>%
+  arrange(desc(trip_count)) %>%
+  head(10)
+
+top_start_stations_weekend
+
+# Plot the most frequent starting stations during weekends
+ggplot(top_start_stations_weekend, aes(x = reorder(start_station_name, -trip_count), y = trip_count)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  coord_flip() +
+  labs(title = "Top 10 Starting Stations During Weekends", x = "Station", y = "Trip Count") +
+  theme_grey()
+
+# Obtain the top 10 ending bike stations during the weekends
+top_end_stations_weekend <- trip_weekends %>%
+  group_by(end_station_name) %>%
+  summarise(trip_count = n()) %>%
+  arrange(desc(trip_count)) %>%
+  head(10)
+
+top_end_stations_weekend
+
+# Plot the most frequent starting stations during weekends
+ggplot(top_end_stations_weekend, aes(x = reorder(end_station_name, -trip_count), y = trip_count)) +
+  geom_bar(stat = "identity", fill = "orange") +
+  coord_flip() +
+  labs(title = "Top 10 Ending Stations During Weekends", x = "Station", y = "Trip Count") +
+  theme_grey()
+
 
