@@ -143,8 +143,8 @@ head(sort(trip_w$zip_code, decreasing = F), 10)
 # the remaining two
 
 # install.packages("tidyverse")
-install.packages("funModeling")
-install.packages("Hmisc")
+# install.packages("funModeling")
+# install.packages("Hmisc")
 
 # Loading the packages
 library(funModeling) 
@@ -167,5 +167,84 @@ basic_eda(trip_w)
 
 # Performing the EDA on the working weather dataset (weather_w)
 basic_eda(weather_w)
+
+######################################
+### Create a cancelled trip column ###
+######################################
+
+# Create a cancelled trip column when the start station name is the same as the
+# end station name and the duration is less than 3 minutes (180 seconds)
+trip_with_can <- trip_w %>%
+  mutate(cancelled_trip = ifelse(start_station_name == end_station_name & duration < 180, 'Yes', 'No'))
+
+# Find out the number of cancelled trips, where there are 1082 trips being cancelled
+freq(trip_with_can$cancelled_trip)
+describe(trip_with_can$cancelled_trip)
+
+cancelled_trip_count <- nrow(trip_with_can %>%
+         filter(cancelled_trip == "Yes"))
+
+cancelled_trip_count
+
+# Record the trip ids for cancelled trips
+cancelled_trip_ids <- trip_with_can %>% 
+  filter(cancelled_trip == 'Yes') %>% 
+  select(id)
+
+cancelled_trip_ids
+
+# Removing the cancelled trips from the working trip dataset
+trip_uncancelled <- trip_with_can %>%
+  filter(cancelled_trip == "No")
+
+#############################################
+### Removing outliers in the trip dataset ###
+#############################################
+
+# Let's first re-visualize the uncancelled trip data
+plot_num(trip_uncancelled)
+
+# Immediately, we can see that there are potential outliers in the duration column
+# The outlier is that there might be a few trips with really high durationr recorded
+# Let's first look at them!
+sort(trip_uncancelled$duration, decreasing = T)
+# There indeed are a lot of trips with really high duration recorded
+# We can visualize these outliers again using boxplot
+boxplot(trip_uncancelled$duration)
+
+# Let's degine the limits for the outliers
+# For the outliers, we can begin begin by defining the quantiles
+Q1 <- quantile(trip_uncancelled$duration, 0.25)
+Q3 <- quantile(trip_uncancelled$duration, 0.75)
+IQR <- Q3 - Q1
+
+# Define the limits for non-outlier data
+# Here, the outliers are defined as any values greater or less than the 1.5 
+# interquartile range (IQR)
+lower_limit <- Q1 - 1.5 * IQR
+upper_limit <- Q3 + 1.5 * IQR
+
+# Identify and record the trip ids of the outliers
+outliers_duration <- trip_uncancelled %>% 
+  filter(duration < lower_limit | duration > upper_limit)
+
+outlier_ids <- outliers_duration$id
+
+outlier_ids
+
+# There are 24873 trips that's considered as outliers, which is roughly 7.6 % 
+# of the uncancelled trips
+length(outlier_ids)
+
+# Remove outliers from the dataset
+trip_no_outliers <- trip_uncancelled %>% 
+  filter(duration >= lower_limit & duration <= upper_limit)
+
+# Display the outlier trip ids and the cleaned dataset
+outlier_ids
+trip_no_outliers
+
+# Let's now vizualize the cleaned dataset without the outliers
+plot_num(trip_no_outliers)
 
 
