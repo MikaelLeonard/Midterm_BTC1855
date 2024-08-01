@@ -143,8 +143,8 @@ head(sort(trip_w$zip_code, decreasing = F), 10)
 # the remaining two
 
 # install.packages("tidyverse")
-install.packages("funModeling")
-install.packages("Hmisc")
+# install.packages("funModeling")
+# install.packages("Hmisc")
 
 # Loading the packages
 library(funModeling) 
@@ -237,13 +237,14 @@ outlier_ids
 length(outlier_ids)
 
 # Remove outliers from the dataset
-trip_dur_no_outliers <- trip_uncancelled %>% 
+trip_no_outliers <- trip_uncancelled %>% 
   filter(duration >= lower_limit & duration <= upper_limit)
 
 # Display the outlier trip ids and the cleaned dataset
 outlier_ids
-trip_dur_no_outliers
+trip_no_outliers
 
-plot_num(trip_dur_no_outliers)
+# Let's now vizualize the cleaned dataset without the outliers
+plot_num(trip_no_outliers)
 
 
