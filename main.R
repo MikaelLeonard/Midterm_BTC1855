@@ -360,4 +360,12 @@ ggplot(top_end_stations_weekend, aes(x = reorder(end_station_name, -trip_count),
   labs(title = "Top 10 Ending Stations During Weekends", x = "Station", y = "Trip Count") +
   theme_grey()
 
+########################################
+### Average monthly bike utilization ###
+########################################
+
+# Use the trip_hm dataset for this
+# for each month, get the total time used from the 
+
+
 
