@@ -210,7 +210,10 @@ plot_num(trip_uncancelled)
 sort(trip_uncancelled$duration, decreasing = T)
 # There indeed are a lot of trips with really high duration recorded
 # We can visualize these outliers again using boxplot
-boxplot(trip_uncancelled$duration)
+boxplot(trip_uncancelled$duration,
+        main = "Boxplot of Trip Duration",
+        xlab = "Trips",
+        ylab = "Duration (seconds)")
 
 # Let's degine the limits for the outliers
 # For the outliers, we can begin begin by defining the quantiles
@@ -247,7 +250,15 @@ trip_no_outliers
 # Let's now vizualize the cleaned dataset without the outliers
 plot_num(trip_no_outliers)
 
-hist(trip_no_outliers$duration)
+boxplot(trip_no_outliers$duration,
+        main = "Boxplot of Trip Duration with Outliers Removed",
+        xlab = "Trips",
+        ylab = "Duration (seconds)")
+
+hist(trip_no_outliers$duration,
+     main = "Histogram of Trip Duration with Outliers Removed",
+     xlab = "Trup duration (seconds)",
+     ylab = "Frequency")
 
 ############################
 ### Establish rush hours ###
