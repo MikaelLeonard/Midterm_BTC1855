@@ -459,11 +459,14 @@ library(corrplot)
 # cloud cover.
 correlation_columns <- trip_stat_weather %>%
   select(duration, min_temperature_f, mean_temperature_f, max_temperature_f, 
-         mean_visibility_miles, mean_wind_speed_mph, max_gust_speed_mph, 
+         max_visibility_miles, mean_visibility_miles, min_visibility_miles, 
+         max_visibility_miles, max_wind_Speed_mph, mean_wind_speed_mph, max_gust_speed_mph, 
          precipitation_inches, cloud_cover)
 
 # Then, using the cor() function, we'll create the correlation matrix
 correlation_matrix <- cor(correlation_columns, use = "complete.obs")
+
+correlation_matrix
 
 par(mar = c(5.1, 4.1, 6.1, 2.1))
 
