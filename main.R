@@ -474,3 +474,4 @@ par(mar = c(5.1, 4.1, 6.1, 2.1))
 corrplot(correlation_matrix, method = "color", tl.cex = 0.7, tl.col = "black")
 title("Correlation Matrix of Trip and Weather Data", line = 4)
 
+# End of Code
