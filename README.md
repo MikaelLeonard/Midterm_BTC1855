@@ -1,6 +1,10 @@
 # Midterm_BTC1855
 
-This file will contain my plan in tacking the task
+Welcome to my analysis on the Bay Area bike rental research!!
+
+## Plan of attack
+
+**Here are my step to complete the analysis**
 
 Step 1: load the datasets into the file
 
