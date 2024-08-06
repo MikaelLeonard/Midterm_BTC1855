@@ -210,7 +210,10 @@ plot_num(trip_uncancelled)
 sort(trip_uncancelled$duration, decreasing = T)
 # There indeed are a lot of trips with really high duration recorded
 # We can visualize these outliers again using boxplot
-boxplot(trip_uncancelled$duration)
+boxplot(trip_uncancelled$duration,
+        main = "Boxplot of Trip Duration",
+        xlab = "Trips",
+        ylab = "Duration (seconds)")
 
 # Let's degine the limits for the outliers
 # For the outliers, we can begin begin by defining the quantiles
@@ -246,6 +249,16 @@ trip_no_outliers
 
 # Let's now vizualize the cleaned dataset without the outliers
 plot_num(trip_no_outliers)
+
+boxplot(trip_no_outliers$duration,
+        main = "Boxplot of Trip Duration with Outliers Removed",
+        xlab = "Trips",
+        ylab = "Duration (seconds)")
+
+hist(trip_no_outliers$duration,
+     main = "Histogram of Trip Duration with Outliers Removed",
+     xlab = "Trup duration (seconds)",
+     ylab = "Frequency")
 
 ############################
 ### Establish rush hours ###
@@ -403,5 +416,62 @@ monthly_usage
 # Here's the percent utilization for a single bike on each month
 monthly_usage$percent_utilization
 
+#######################################################
+### Weather condition impact on bike renal analysis ###
+#######################################################
 
+# join the trip_month dataset with weather_w dataset for each city and date
 
+# join the trip_month dataset with the station_w dataset for the date and city 
+# to get the city added as a new column corresponding to the city in the start(or end is better)
+# station name in the trip_month dataset
+
+trip_date_isolated <- trip_month %>%
+  separate(start_date, c('date', 'time'), sep = " ")
+
+trip_date_isolated$date <- ymd(trip_date_isolated$date)
+
+str(trip_date_isolated$date)
+
+trip_station <- trip_date_isolated %>%
+  left_join(station_w, by = c("start_station_name" = "name"))
+
+# Join combined trip and station dataset (basically trip dataset with the city from the station dataset)
+# with the weather dataset by date and city
+
+trip_stat_weather <- trip_station %>%
+  left_join(weather_w, by = c("date" = "date", "city" = "city"))
+
+# Let's now begin with plotting the correlation. As we'll use the cor() function
+# to generate the correlation matrix, we'll need to install the corrplot package
+# if its not yet installed and load the package.
+#install.packages("corrplot")
+library(corrplot)
+
+# Since we're interested in biking rental patterns caused by different weather conditions,
+# we can select specific columns from the joined dataframe to focus on them.
+
+# One avenue we can focus on is to see whether the duration of one's bike ride is correlation
+# or affected by the weather condition.
+
+# To do so, we can select the duration column and the numerical weather condition columns
+# pertaining to temperature, visibility, wind speed, gust speed, precipitation inches, and
+# cloud cover.
+correlation_columns <- trip_stat_weather %>%
+  select(duration, min_temperature_f, mean_temperature_f, max_temperature_f, 
+         max_visibility_miles, mean_visibility_miles, min_visibility_miles, 
+         max_visibility_miles, max_wind_Speed_mph, mean_wind_speed_mph, max_gust_speed_mph, 
+         precipitation_inches, cloud_cover)
+
+# Then, using the cor() function, we'll create the correlation matrix
+correlation_matrix <- cor(correlation_columns, use = "complete.obs")
+
+correlation_matrix
+
+par(mar = c(5.1, 4.1, 6.1, 2.1))
+
+# Plot the correlation matrix
+corrplot(correlation_matrix, method = "color", tl.cex = 0.7, tl.col = "black")
+title("Correlation Matrix of Trip and Weather Data", line = 4)
+
+# End of Code
