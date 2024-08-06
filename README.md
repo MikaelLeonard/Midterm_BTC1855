@@ -2,6 +2,13 @@
 
 Welcome to my analysis on the Bay Area bike rental research!!
 
+## File descriptions
+
+- `main.R` is the main R script for the analysis' codes
+- `Bay_are_renta_report.docx` is the report analysis 
+- `outlier_ids.csv` is the list of outlier ids
+- `cancelled_trip_ids.csv` is the list of cancelled trip ids
+
 ## Plan of attack
 
 **Here are my step to complete the analysis**
