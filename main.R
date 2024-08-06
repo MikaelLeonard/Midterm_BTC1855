@@ -193,6 +193,9 @@ cancelled_trip_ids <- trip_with_can %>%
 
 cancelled_trip_ids
 
+# Save the cancelled trip ids into a csv file
+#write.csv(cancelled_trip_ids, "cancelled_trip_ids.csv", row.names = FALSE)
+
 # Removing the cancelled trips from the working trip dataset
 trip_uncancelled <- trip_with_can %>%
   filter(cancelled_trip == "No")
@@ -234,6 +237,9 @@ outliers_duration <- trip_uncancelled %>%
 outlier_ids <- outliers_duration$id
 
 outlier_ids
+
+# Save the outlier ids into a csv file
+#write.csv(outlier_ids, "outlier_ids.csv", row.names = FALSE)
 
 # There are 24873 trips that's considered as outliers, which is roughly 7.6 % 
 # of the uncancelled trips
