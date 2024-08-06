@@ -474,6 +474,8 @@ correlation_matrix <- cor(correlation_columns, use = "complete.obs")
 
 correlation_matrix
 
+# Modify the margins for plotting to ensure that the title does not obstruct the
+# labels
 par(mar = c(5.1, 4.1, 6.1, 2.1))
 
 # Plot the correlation matrix
