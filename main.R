@@ -464,10 +464,26 @@ library(corrplot)
 # pertaining to temperature, visibility, wind speed, gust speed, precipitation inches, and
 # cloud cover.
 correlation_columns <- trip_stat_weather %>%
-  select(duration, min_temperature_f, mean_temperature_f, max_temperature_f, 
-         max_visibility_miles, mean_visibility_miles, min_visibility_miles, 
-         max_visibility_miles, max_wind_Speed_mph, mean_wind_speed_mph, max_gust_speed_mph, 
-         precipitation_inches, cloud_cover)
+  group_by(date, city) %>%
+  summarise(
+    daily_trips = n(),
+    total_duration = sum(duration),
+    min_temperature_f = mean(min_temperature_f),
+    mean_temperature_f = mean(mean_temperature_f),
+    max_temperature_f = mean(max_temperature_f),
+    max_visibility_miles = mean(max_visibility_miles),
+    mean_visibility_miles = mean(mean_visibility_miles),
+    min_visibility_miles = mean(min_visibility_miles),
+    max_wind_Speed_mph = mean(max_wind_Speed_mph),
+    mean_wind_speed_mph = mean(mean_wind_speed_mph),
+    max_gust_speed_mph = mean(max_gust_speed_mph),
+    precipitation_inches = mean(precipitation_inches),
+    cloud_cover = mean(cloud_cover),
+    .groups = "drop",
+  )
+
+correlation_columns <- correlation_columns %>%
+  select(-city, -date)
 
 # Then, using the cor() function, we'll create the correlation matrix
 correlation_matrix <- cor(correlation_columns, use = "complete.obs")
