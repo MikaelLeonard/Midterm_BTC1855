@@ -151,6 +151,7 @@ library(funModeling)
 library(tidyverse) 
 library(Hmisc)
 
+# SK Good idea to put all code into a function
 # tl;dr code
 basic_eda <- function(data)
 {
