@@ -164,6 +164,8 @@ basic_eda <- function(data)
 }
 
 # Performing the EDA on the workig trip dataset (trip_w)
+# SK (Points taken) The output of the code below shows 70 unique start/end station IDs, and 
+# 74 unique start/end station names. This is a discrepancy worth looking into.
 basic_eda(trip_w)
 
 # Performing the EDA on the working weather dataset (weather_w)
